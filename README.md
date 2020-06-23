@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-06-22 20:24:24
- * @LastEditTime: 2020-06-23 14:57:49
+ * @LastEditTime: 2020-06-23 15:00:19
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /learnNodeAgain/bin/README.md
@@ -40,8 +40,7 @@ JS 需要一个**解释器**才能运行，在网页中的JS，浏览器充当�
 我们这里不是说的JS吗？怎么又扯到二进制模块了，这是因为JS是上层编程语言，上层编程语言计算机是无法直接执行。需要编译成计算机可读的二进制文件。文件模块/核心模块 > 内建模块(C语言写的模块) > 汇编语言 > 微指令 = 计算机执行。这里说的`二进制模块`是指，NodeJS支持直接执行`C语言`编写的模块。PS: 除非你特牛，否则轻易不要使用二进制模块。
 ## NodeJS中的代码组织与部署
 任何一个软件工程项目在开工前，首先需要准备好的是代码的目录结构和部署方式。如同修房子要先搭脚手架。
-### 模块路径解析规则
-> nodeJS 中的模块路径解析规则
+### nodeJS 中的模块路径解析规则
 
 1、对于**内置模块**: 不做路径解析，直接返回内部模块的导出对象</br>
 2、对于**三方模块**: NodeJS定义了一个特殊的目录`node_module`用于存放三方模块.例如有个模块绝对路径是 `/home/user/hello.js`,在该模块中使用**require('foo/bar')**,则NodeJS会一次尝试使用以下路径。
