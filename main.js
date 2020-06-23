@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-06-23 15:17:02
- * @LastEditTime: 2020-06-23 16:41:33
+ * @LastEditTime: 2020-06-23 16:58:04
  * @LastEditors: Please set LastEditors
  * @Description: 项目主模块，
  * @FilePath: /learnNodeAgain/main.js
@@ -26,4 +26,14 @@ process.argv 获取命令行参数，
 process.argv[0] 固定等于 NodeJS 执行程序的绝对路径，就是 node 所在的路径，
 process.argv[1] 固定等于主模块的绝对路径，就是 main.js 的位置
 因此第一个命令行参数从 process.argv[2]这个位置开始
+*/
+
+/* 
+fs.createReadStream 创建一个源文件的只读数据流
+fs.createWriteStream 创建一个目标文件的只写数据流
+使用 pipe 方法把两个数据流连接起来
+*/
+
+/* 
+
 */
