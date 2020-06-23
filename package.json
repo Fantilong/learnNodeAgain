@@ -1,5 +1,21 @@
 {
-
-
-
+    "name": "learn-nodeJS-Again",
+    "version": "1.0.0",
+    "description": "体验NodeJS内置库的基本功能",
+    "main": "./main.js",
+    "bin": {},
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@github.com:Fantilong/learnNodeAgain.git"
+    },
+    "author": "fantilong",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/Fantilong/learnNodeAgain/issues"
+    },
+    "homepage": "",
+    "dependencies": {}
 }
