@@ -1,18 +1,24 @@
 /*
  * @Author: your name
  * @Date: 2020-06-23 15:17:02
- * @LastEditTime: 2020-06-23 16:06:10
+ * @LastEditTime: 2020-06-23 16:41:33
  * @LastEditors: Please set LastEditors
  * @Description: 项目主模块，
  * @FilePath: /learnNodeAgain/main.js
  */
 // 载入文件模块
-const { my_copy_sync: my_copy_sync } = require('./libs');
+const {
+    myFileSys: {
+        my_copy_sync: my_copy_sync,
+        my_copy: my_copy,
+    }
+} = require('./libs');
 
 // 使用进程获取控制台参数
 var param = process.argv.slice(2);
-//  执行复制函数
-my_copy_sync(param[0], param[1]);
+// 执行复制函数
+// my_copy_sync(param[0], param[1]); // 小文件拷贝
+my_copy(param[0], param[1]); //大文件拷贝
 
 /* 
 process 是一个全局变量，类似 __dirname 和 __dirpath 
