@@ -67,10 +67,111 @@ JS模块的基本单位是单个JS文件，但复杂的模块往往由多个子�
 * package.json文件
 
 自定义入口模块的文件名和存放位置，可以使用`package.json`文件，并在其中指定入口模块的路径。用于设定的属性如下：
-> {</br>
-> "name": "cat",</br>
->    "main": "./lib/main.js"</br>
-> }
+```
+{
+    "name": "cat",
+    "main": "./lib/main.js"
+}
+```
+### NodeJS中工程目录
+
+```
+learnNodeAgain           # 工程目录
+    .
+    ├── README.md        # 工程说明文档
+    ├── bin              # 存放命令行相关代码
+    │   └── README.md    # 路径功能说明文档（可放可不放）
+    ├── doc              # 存放文档
+    │   └── README.md    # 路径功能说明文档（可放可不放）
+    ├── libs             # 存放API相关代码
+    │   └── README.md    # 路径功能说明文档（可放可不放）
+    ├── node_modules     # 存放三方包
+    │   └── README.md    # 路径功能说明文档（可放可不放）
+    ├── package.json     # 元数据文件（说明了项目，在编码角度的需求，主要是npm需要）
+    └── tests            # 存放测试用例
+        └── README.md    # 路径功能说明文档（可放可不放）
+```
+### NPM（NodeJS Package Manager）
+随同NodeJS一起安装的包管理工具，能解决NodeJS代码部署上的很多问题，常用场景如下：
+* 允许用户从NPM服务器下载别人编写的三方包到本地使用
+* 允许用户从NPM服务器下载并安装别人编写的命令行到本地使用
+* 允许用户将自己编写的包或命令行程序上传到NPM服务器供别人使用
+
+#### 下载三方包
+> npm install argv
+
+下载好的 `argv` 包就放在工程目录的 `node_modules` 目录中，因此在代码中只需要通过 `require('argv')` 就可以了，以上命令默认下载最新版的三方包，如果想下载指定版本，可以在包后面加上 `包名@<version>`,例如：下载 0.0.1半的 `argv`。
+> npm install argv@0.0.1
+
+#### 一行命令下载多个三方包
+NPM对 `package.json` 的字段做了扩展，允许在其中申明三方包依赖。使用其中 dependencies 属性：说明工程需要的包依赖
+```
+{
+    "name": "node-echo",
+    "main": "./lib/echo.js",
+    "dependencies": {
+        "argv": "0.0.2"
+    }
+}
+```
+> npm install
+
+* 这样使用命令 npm install，npm会检索 package.json 中的 dependencies 属性中定义的包依赖及其版本。
+* 同时也会检索三包依赖，其包本身需要的其他包依赖，也会一并下载。这样好处在于用户只需要关心自己项目需要的包依赖就行了。
+
+#### 安装命令行程序
+> npm install node-echo -g
+
+-g 表示全局安装，程序包会默认安装到以下位置，并且NPM自动会创建好Linux系统下需要的软链接文件或Windows系统下需要的.cmd文件
+```
+- /usr/local/               # Linux系统下
+    - lib/node_modules/
+        + 包位置/
+        ...
+    - bin/
+        软链接
+        ...
+    ...
+
+- %APPDATA%\npm\            # Windows系统下
+    - node_modules\
+        + 包位置\
+        ...
+    node-echo.cmd
+    ...
+```
+#### 发布代码
+   1. 注册NPM账号，终端运行 `npm adduser` ,按提示做即可
+   2. 编辑 `package.json` 文件，加入 `NPM`必需的字段
+   ```
+   {
+        "name": "node-echo",           # 包名，在NPM服务器上须要保持唯一
+        "version": "1.0.0",            # 当前版本号
+        "dependencies": {              # 三方包依赖，需要指定包名和版本号
+            "argv": "0.0.2"
+        },
+        "main": "./lib/echo.js",       # 入口模块位置
+        "bin" : {
+            "node-echo": "./bin/node-echo"      # 命令行程序名和主模块位置
+        }
+    }
+   ```
+   3. 在 `package.json` 所在目录下运行 `npm  publish` 命令发布代码
+
+   > PS:版本号的语义：1.0.0 -> X.Y.Z</br>
+   > X: 大变动，向下不兼容，需要更新X位</br>
+   > Y: 新增功能，向下兼容，需要更新Y位</br>
+   > Z: 修复Bug，需要更新Z位</br>
+
+
+
+
+
+
+
+
+
+
 
 
 
