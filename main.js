@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-06-23 15:17:02
- * @LastEditTime: 2020-06-26 15:17:24
+ * @LastEditTime: 2020-06-26 17:07:25
  * @LastEditors: Please set LastEditors
  * @Description: 项目主模块，
  * @FilePath: /learnNodeAgain/main.js
@@ -17,6 +17,7 @@ const {
     }
 } = require('./libs');
 const fs = require('fs');
+const http = require('http');
 
 // 使用进程获取控制台参数
 var param = process.argv.slice(2);
@@ -41,7 +42,24 @@ var param = process.argv.slice(2);
 // console.log(fs.readFileSync('./doc/file1.txt'));
 
 
+http.createServer((req, res) => {
+    var body = fs.readFileSync('./doc/file1.txt');
 
+    console.log(req.method);
+    console.log(req.headers);
+
+
+    req.on('data', chunk => {
+        body = Buffer.concat([body, chunk]);
+    });
+    req.on('end', () => {
+        console.log(body.toString('utf-8'));
+        // console.log('done');
+    });
+
+    // res.writeHead(200, { 'Content-Type': 'text-plain' });
+    // res.end('Hello World\n');
+}).listen(5000);
 
 /* 
 fs.createReadStream 创建一个源文件的只读数据流
