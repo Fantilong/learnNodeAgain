@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-06-23 15:17:02
- * @LastEditTime: 2020-06-26 17:07:25
+ * @LastEditTime: 2020-06-26 17:19:03
  * @LastEditors: Please set LastEditors
  * @Description: 项目主模块，
  * @FilePath: /learnNodeAgain/main.js
@@ -43,22 +43,17 @@ var param = process.argv.slice(2);
 
 
 http.createServer((req, res) => {
-    var body = fs.readFileSync('./doc/file1.txt');
-
-    console.log(req.method);
-    console.log(req.headers);
-
+    res.writeHead(200, {
+        'Content-Type': 'text/plain'
+    });
 
     req.on('data', chunk => {
-        body = Buffer.concat([body, chunk]);
-    });
-    req.on('end', () => {
-        console.log(body.toString('utf-8'));
-        // console.log('done');
+        res.write(chunk);
     });
 
-    // res.writeHead(200, { 'Content-Type': 'text-plain' });
-    // res.end('Hello World\n');
+    req.on('end', () => {
+        res.end();
+    });
 }).listen(5000);
 
 /* 
