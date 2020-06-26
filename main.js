@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-06-23 15:17:02
- * @LastEditTime: 2020-06-26 17:19:03
+ * @LastEditTime: 2020-06-26 21:16:22
  * @LastEditors: Please set LastEditors
  * @Description: 项目主模块，
  * @FilePath: /learnNodeAgain/main.js
@@ -18,6 +18,7 @@ const {
 } = require('./libs');
 const fs = require('fs');
 const http = require('http');
+const net = require('net');
 
 // 使用进程获取控制台参数
 var param = process.argv.slice(2);
@@ -42,17 +43,29 @@ var param = process.argv.slice(2);
 // console.log(fs.readFileSync('./doc/file1.txt'));
 
 
-http.createServer((req, res) => {
-    res.writeHead(200, {
-        'Content-Type': 'text/plain'
-    });
+// http.createServer((req, res) => {
+//     res.writeHead(200, {
+//         'Content-Type': 'text/plain'
+//     });
 
-    req.on('data', chunk => {
-        res.write(chunk);
-    });
+//     req.on('data', chunk => {
+//         res.write(chunk);
+//     });
 
-    req.on('end', () => {
-        res.end();
+//     req.on('end', () => {
+//         res.end();
+//     });
+// }).listen(5000);
+
+net.createServer(conn => {
+    conn.on('data', data => {
+        conn.write([
+            'HTTP/1.1 200 OK',
+            'Content-Type: text/plain',
+            'Content-Length: 11',
+            '',
+            'Hello World'
+        ].join('\n'));
     });
 }).listen(5000);
 
