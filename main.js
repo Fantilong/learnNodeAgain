@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-06-23 15:17:02
- * @LastEditTime: 2020-06-26 11:04:44
+ * @LastEditTime: 2020-06-26 15:17:24
  * @LastEditors: Please set LastEditors
  * @Description: 项目主模块，
  * @FilePath: /learnNodeAgain/main.js
@@ -12,9 +12,11 @@ const {
         my_copy_sync: my_copy_sync,
         my_copy: my_copy,
         travel: travel,
-        travel_sync: travel_sync
+        travel_sync: travel_sync,
+        read_text: read_text,
     }
 } = require('./libs');
+const fs = require('fs');
 
 // 使用进程获取控制台参数
 var param = process.argv.slice(2);
@@ -27,10 +29,19 @@ var param = process.argv.slice(2);
 //     // 文件处理
 // });
 
-travel(param[0], (file_path, callback) => {
-    console.log(file_path);
-    callback();
-});
+// travel(param[0], (file_path, callback) => {
+//     console.log(file_path);
+//     callback();
+// });
+
+// var bom = ['0xEF', '0xBB', '0xBF'];
+// var bin = fs.readFileSync('./doc/file1.txt');
+// let my_bom_buf = Buffer.from([...bom, ...bin]);
+
+// console.log(fs.readFileSync('./doc/file1.txt'));
+
+
+
 
 /* 
 fs.createReadStream 创建一个源文件的只读数据流
