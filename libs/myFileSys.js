@@ -1,13 +1,14 @@
 /*
  * @Author: your name
  * @Date: 2020-06-23 15:21:19
- * @LastEditTime: 2020-06-26 11:11:09
+ * @LastEditTime: 2020-06-26 15:21:40
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /learnNodeAgain/libs/myFileSys.js
  */
 const fs = require('fs');
 const path = require('path');
+const iconv = require('iconv-lite'); // 读取GBK编码的文本
 
 /**
  * @description: 小文件拷贝 
@@ -61,19 +62,46 @@ function travel(dir, callback, finish) {
     fs.readdir(dir, (err, files) => {
         (function next(i) {
             if (i < files.length) {
-                let file_path = path.join(dir, files[i]);
+                let file_path = path.join(dir, files[i]); // 拼接路径
                 fs.stat(file_path, (err, status) => {
                     if (status.isDirectory()) {
+                        // 是目录？递归调用，传入 finish 函数
                         travel(file_path, callback, () => next(i + 1));
                     } else {
                         callback(file_path, () => { next(i + 1) });
                     }
                 });
             } else {
-                finish && finish(); // 遍历完成后执行
+                finish && finish(); // 该分支遍历完成，下一个分支
             }
         }(0));
     });
+}
+
+/**
+ * @description: 读文件时，去除BOM
+ * @param {String} 文件路径
+ * @return: {String}
+ */
+function read_text(dir) {
+    let bin = fs.readFileSync(dir);
+
+    if (bin[0] === '0xEF' && bin[1] === '0xBB' && bin[2] === '0xBF') {
+        bin = bin.slice(3);
+    }
+
+    return bin.toString('utf-8');
+}
+
+
+/**
+ * @description: 借用三方包 iconv-lite ，读取 GBK 编码的文本文件
+ * @param {URL} 文件路径
+ * @return: {String} 文本内容
+ */
+function readGBKText(pathname) {
+    var bin = fs.readFileSync(pathname);
+    return iconv.decode(bin, 'gbk')
 }
 
 // 设置导出对象为 copy 函数
@@ -81,5 +109,6 @@ module.exports = {
     my_copy,
     my_copy_sync,
     travel,
-    travel_sync
+    travel_sync,
+    read_text
 };
