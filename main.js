@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-06-23 15:17:02
- * @LastEditTime: 2020-06-26 21:16:22
+ * @LastEditTime: 2020-06-27 18:24:46
  * @LastEditors: Please set LastEditors
  * @Description: 项目主模块，
  * @FilePath: /learnNodeAgain/main.js
@@ -41,7 +41,6 @@ var param = process.argv.slice(2);
 // let my_bom_buf = Buffer.from([...bom, ...bin]);
 
 // console.log(fs.readFileSync('./doc/file1.txt'));
-
 
 // http.createServer((req, res) => {
 //     res.writeHead(200, {
