@@ -308,33 +308,97 @@ request --> 解析URL, 获取 URL 要求 --> 处理要求 --> 输出 --> 响应
 ## 第二次迭代
 需求：从程序性能触发，改进代码
 ### 设计
-把 `map` 方法换成 `for` 或许会更快些，但第一版代码最大的性能问题存在于从读取到输出响应的过程当中。以处理 `/??a.js,b.js,c,js` 这个请求为例
+把 `map` 方法换成 `for` 或许会更快些，但第一版代码最大的性能问题存在于从读取到输出响应的过程当中。
+以处理 `/??a.js,b.js,c,js` 这个请求为例
 ，看看整个处理过程中耗时在哪里。
 ### 实现
 1. 校验了路径
 2. 使用 pipe 做readFile做只读数据流，response 对象做只写数据流
 
+## 第三次迭代
+### 设计
+新增守护进程，让服务挂掉的时候，立即重启服务。利用NodeJS的进程管理机制，将守护进程作为父进程，
+将服务器程序作为子进程，并让父进程监控子进程的运行状态。在其异常退出时重启zjc。
+### 实现
+根据以上设计，守护进程代码如下：
+```
+/* daemon.js */ 
+const child_pro = require('child_process');
+let worker;
 
- 
- 
+/*
+ * @description:
+ * @param
+ * @param
+ * */
+function spawn(server, config){
+    console.log("守护进程让服务器进程启动..");
+    worker = child_pro.spawn('node', [server, config]);
+    worker.on('exit', code => {
+        console.log("守护进程监控到服务器进程退出");
+
+        if(code !== 0){
+            console.log("守护进程监控到服务器进程退出码不等于0，重启服务器进程");
+            spawn(server, config);
+        }
+    });
+}
+
+/*
+ * @description:
+ * @param 
+ * */
+ function main(argvs){
+    spawn('main.js', argvs[0]);
+     process.on('SIGTERM', () => {
+         console.log("守护进程收到通信，向服务器进程通信");
+         worker.kill();
+         process.exit(0);
+     });
+ }
+
+main(process.argv.slice(2));
+
+/* main.js */ 
+const http = require('http');
+const fs = require('fs');
+const {parse_url, combine_files, validateFiles, outputFiles} = require('./libs/common');
 
 
+function main(argvs) {
+    let config = JSON.parse(fs.readFileSync(argvs[0], 'utf-8')),
+        root = config.root || '.',
+        port = config.port || 5000,
+        server;
 
+    server = http.createServer((req, res) => {
+        let url_info = parse_url(root, req.url);
 
+        validateFiles(url_info.pathnames, (err, pathnames) => {
+            if(err) {
+                res.writeHead(404);
+                res.end(err.message);
+                return;
+            }
 
+            res.writeHead(200, {
+                'Content-Type': url_info.mime
+            });
+            outputFiles(pathnames, res);
+        });
+    }).listen(port);
 
+    process.on('SIGTERM', () => {
+        console.log("服务器进程收到通信消息");
+        server.close(() => {
+            console.log("服务器进程停止，回调函数设置服务器进程退出码为0");
+            process.exit(0);
+        });
+    });
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+main(process.argv.slice(2));
+```
+## 第四次迭代
+### 设计
+### 实现
