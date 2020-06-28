@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-06-22 20:24:24
- * @LastEditTime: 2020-06-23 15:00:19
+ * @LastEditTime: 2020-06-28 10:19:29
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /learnNodeAgain/bin/README.md
@@ -161,6 +161,40 @@ NPM对 `package.json` 的字段做了扩展，允许在其中申明三方包依�
    > X: 大变动，向下不兼容，需要更新X位</br>
    > Y: 新增功能，向下兼容，需要更新Y位</br>
    > Z: 修复Bug，需要更新Z位</br>
+
+# 大示例
+一个完整的 NodeJS 开发的 Web 服务器示例
+## 需求 
+一个简单的静态文件合并服务器，该服务器需要支持类似以下格式的 JS 或 CSS 问价 合并请求
+```
+http://assets.example.com/foo/??bar.js,baz.js
+```
+在以上 URL 中，`??` 是一个分隔符，`??` 之前是需要合并的多个文件的 URL 公共部分， `??` 之后是使用 `,` 分割的差异部分。因此服务器处理这个 URL 时，返回的是以下 `两个文件` 按顺序 `合并后` 的内容。
+```
+/foo/bar.js
+/foo/baz.js
+```
+另外，服务业需要能支持类似以下格式的普通的 JS 或 CSS 文件请求
+```
+http://assets.example.com/foo/bar.js
+```
+以上就是整个需求
+
+## 第一次迭代
+快速迭代是一种不错的开发方式，因此我们再第一次迭代时先实现服务器的基本功能。
+### 设计
+程序大概解析过程
+```
+request --> 解析URL, 获取 URL 要求 --> 处理要求 --> 输出 --> 响应
+```
+1. 分析 URL，得到请求的文件路径 和 类型（MIME）
+2. 读取文件，并按顺序合并文件内容
+3. 返回响应,完成一次请求的处理
+
+> PS: 服务器在读取文件时需要有个根目录，并且服务器监听的 HTTP 端口最后写不要写死在代码里，因此服务器需要是可配置的
+ ### 实现
+ 
+
 
 
 
